@@ -96,6 +96,43 @@ body {
     font-weight: 500;
 }
 
+/* Deadline Notice */
+.deadline-notice {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: var(--shadow-lg);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+    }
+}
+
+/* Upload Note */
+.upload-note {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
 /* Form Container */
 .form-container {
     background: var(--surface);
