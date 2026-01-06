@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Makluman Ketidakhadiran - 4 Satria</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="satria.jpg" alt="Logo 4 Satria" class="logo">
+            <h1>Sistem Makluman Ketidakhadiran</h1>
+            <p class="subtitle">Kelas 4 Satria</p>
+        </header>
+
+        <main class="form-container">
+            <form id="attendanceForm">
+                <!-- Student Selection -->
+                <div class="form-group">
+                    <label for="studentName">Nama Pelajar <span class="required">*</span></label>
+                    <select id="studentName" name="studentName" required>
+                        <option value="">-- Pilih Nama Pelajar --</option>
+                    </select>
+                </div>
+
+                <!-- Reason Selection -->
+                <div class="form-group">
+                    <label for="reason">Sebab Ketidakhadiran <span class="required">*</span></label>
+                    <select id="reason" name="reason" required>
+                        <option value="">-- Pilih Sebab --</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Urusan Keluarga">Urusan Keluarga</option>
+                        <option value="Kecemasan">Kecemasan</option>
+                        <option value="Masalah Pengangkutan">Masalah Pengangkutan</option>
+                        <option value="Banjir">Banjir</option>
+                        <option value="Kematian Ahli Keluarga">Kematian Ahli Keluarga</option>
+                        <option value="Jaga Keluarga Sakit">Jaga Keluarga Sakit</option>
+                        <option value="Lain-Lain">Lain-Lain</option>
+                    </select>
+                </div>
+
+                <!-- Other Reason (if Lain-Lain selected) -->
+                <div class="form-group" id="otherReasonGroup" style="display: none;">
+                    <label for="otherReason">Nyatakan Sebab Ketidakhadiran <span class="required">*</span></label>
+                    <input type="text" id="otherReason" name="otherReason"
+                        placeholder="Contoh: Terlibat dalam acara keluarga">
+                </div>
+
+                <!-- Illness Type (Conditional - only for Sakit) -->
+                <div class="form-group" id="illnessTypeGroup" style="display: none;">
+                    <label for="illnessType">Jenis Sakit <span class="required">*</span></label>
+                    <select id="illnessType" name="illnessType">
+                        <option value="">-- Pilih Jenis Sakit --</option>
+                        <option value="Demam">Demam</option>
+                        <option value="Batuk">Batuk</option>
+                        <option value="Selsema">Selsema</option>
+                        <option value="Sakit Mata">Sakit Mata</option>
+                        <option value="Influenza">Influenza</option>
+                        <option value="COVID-19">COVID-19</option>
+                        <option value="Lain-lain">Lain-lain</option>
+                    </select>
+                </div>
+
+                <!-- Other Illness (if Lain-lain selected) -->
+                <div class="form-group" id="otherIllnessGroup" style="display: none;">
+                    <label for="otherIllness">Nyatakan Jenis Sakit <span class="required">*</span></label>
+                    <input type="text" id="otherIllness" name="otherIllness" placeholder="Contoh: Sakit Perut">
+                </div>
+
+                <!-- Date Range -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">Tarikh Mula <span class="required">*</span></label>
+                        <input type="date" id="startDate" name="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">Tarikh Tamat <span class="required">*</span></label>
+                        <input type="date" id="endDate" name="endDate" required>
+                    </div>
+                </div>
+
+                <!-- Duration Display -->
+                <div class="form-group">
+                    <label>Jumlah Hari</label>
+                    <div class="duration-display" id="durationDisplay">-</div>
+                </div>
+
+                <!-- File Upload (Conditional) -->
+                <div class="form-group" id="mcUploadGroup" style="display: none;">
+                    <label for="mcUpload">Muat Naik Gambar MC <span class="required">*</span></label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="mcUpload" name="mcUpload" accept="image/*" capture="environment">
+                        <label for="mcUpload" class="file-upload-label">
+                            <span class="upload-icon">📷</span>
+                            <span class="upload-text">Pilih atau Ambil Gambar MC</span>
+                        </label>
+                        <div id="mcPreview" class="file-preview"></div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="letterUploadGroup" style="display: none;">
+                    <label for="letterUpload">Muat Naik Surat Ibu Bapa <span class="required">*</span></label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="letterUpload" name="letterUpload" accept="image/*" capture="environment">
+                        <label for="letterUpload" class="file-upload-label">
+                            <span class="upload-icon">📷</span>
+                            <span class="upload-text">Pilih atau Ambil Gambar Surat</span>
+                        </label>
+                        <div id="letterPreview" class="file-preview"></div>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="preview-section" id="previewSection" style="display: none;">
+                    <h3>Pratonton Mesej WhatsApp</h3>
+                    <div class="preview-content" id="previewContent"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" id="previewBtn">Pratonton</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Hantar & Jana Link WhatsApp</button>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loading" id="loadingIndicator" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Menghantar maklumat...</p>
+                </div>
+            </form>
+        </main>
+
+        <footer class="footer">
+            <p>Sistem Makluman Ketidakhadiran Kelas 4 Satria</p>
+            <p class="footer-note">Sila pastikan semua maklumat adalah tepat sebelum menghantar</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
