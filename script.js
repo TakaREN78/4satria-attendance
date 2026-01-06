@@ -1,5 +1,5 @@
 // Configuration
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAQl37P2RVo2oEbb_gSfFbn9dmwxM5AU_l_PyGB64J_HZoj_QcRnEigC2-50vpuDGnxQ/exec'; // To be replaced after setup
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAQl37P2RVo2oEbb_gSfFbn9dmwxM5AU_l_PyGB64J_HZoj_QcRnEigC2-50vpuDGnxQ/exec';
 
 // Global variables
 let studentsData = [];
@@ -18,7 +18,7 @@ async function loadStudentData() {
         const csvText = await response.text();
 
         // Parse CSV
-        const lines = csvText.split('\n');
+        const lines = csvText.split('\\n');
         const studentSelect = document.getElementById('studentName');
 
         // Skip header and empty lines, start from line 4 (index 3)
@@ -61,9 +61,6 @@ function initializeEventListeners() {
     document.getElementById('mcUpload').addEventListener('change', handleFilePreview);
     document.getElementById('letterUpload').addEventListener('change', handleFilePreview);
 
-    // Preview button
-    document.getElementById('previewBtn').addEventListener('click', showPreview);
-
     // Form submission
     document.getElementById('attendanceForm').addEventListener('submit', handleSubmit);
 }
@@ -91,12 +88,10 @@ function handleReasonChange(e) {
     mcUploadGroup.style.display = 'none';
     letterUploadGroup.style.display = 'none';
 
-    // Reset required attributes
+    // Reset required attributes - files are now optional
     document.getElementById('illnessType').removeAttribute('required');
     document.getElementById('otherIllness').removeAttribute('required');
     document.getElementById('otherReason').removeAttribute('required');
-    document.getElementById('mcUpload').removeAttribute('required');
-    document.getElementById('letterUpload').removeAttribute('required');
 
     if (reason === 'Sakit') {
         // Show illness type and MC upload
@@ -106,7 +101,6 @@ function handleReasonChange(e) {
         mcUploadGroup.classList.add('slide-down');
 
         document.getElementById('illnessType').setAttribute('required', 'required');
-        document.getElementById('mcUpload').setAttribute('required', 'required');
     } else if (reason === 'Lain-Lain') {
         // Show custom reason input and letter upload
         otherReasonGroup.style.display = 'block';
@@ -115,12 +109,10 @@ function handleReasonChange(e) {
         letterUploadGroup.classList.add('slide-down');
 
         document.getElementById('otherReason').setAttribute('required', 'required');
-        document.getElementById('letterUpload').setAttribute('required', 'required');
     } else if (reason) {
         // Show letter upload for other reasons
         letterUploadGroup.style.display = 'block';
         letterUploadGroup.classList.add('slide-down');
-        document.getElementById('letterUpload').setAttribute('required', 'required');
     }
 }
 
@@ -196,57 +188,6 @@ function handleFilePreview(e) {
     }
 }
 
-// Show preview of WhatsApp message
-function showPreview() {
-    // Validate only required fields except file upload
-    const studentName = document.getElementById('studentName').value;
-    const reason = document.getElementById('reason').value;
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-
-    if (!studentName) {
-        alert('Sila pilih nama pelajar');
-        return;
-    }
-    if (!reason) {
-        alert('Sila pilih sebab ketidakhadiran');
-        return;
-    }
-    if (!startDate || !endDate) {
-        alert('Sila pilih tarikh mula dan tamat');
-        return;
-    }
-
-    // Check conditional fields
-    if (reason === 'Sakit') {
-        const illnessType = document.getElementById('illnessType').value;
-        if (!illnessType) {
-            alert('Sila pilih jenis sakit');
-            return;
-        }
-        if (illnessType === 'Lain-lain' && !document.getElementById('otherIllness').value) {
-            alert('Sila nyatakan jenis sakit');
-            return;
-        }
-    } else if (reason === 'Lain-Lain') {
-        if (!document.getElementById('otherReason').value) {
-            alert('Sila nyatakan sebab ketidakhadiran');
-            return;
-        }
-    }
-
-    const message = generateWhatsAppMessage();
-    const previewSection = document.getElementById('previewSection');
-    const previewContent = document.getElementById('previewContent');
-
-    previewContent.textContent = message;
-    previewSection.style.display = 'block';
-    previewSection.classList.add('slide-down');
-
-    // Scroll to preview
-    previewSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
 // Validate form
 function validateForm() {
     const form = document.getElementById('attendanceForm');
@@ -257,49 +198,6 @@ function validateForm() {
     }
 
     return true;
-}
-
-// Generate WhatsApp message
-function generateWhatsAppMessage() {
-    const studentName = document.getElementById('studentName').value;
-    let reason = document.getElementById('reason').value;
-    const startDate = formatDate(document.getElementById('startDate').value);
-    const endDate = formatDate(document.getElementById('endDate').value);
-    const duration = document.getElementById('durationDisplay').textContent;
-
-    // Handle custom reason for Lain-Lain
-    if (reason === 'Lain-Lain') {
-        reason = document.getElementById('otherReason').value;
-    }
-
-    let message = `*Makluman Ketidakhadiran*\n\n`;
-    message += `Nama: ${studentName}\n`;
-    message += `Kelas: 4 Satria\n`;
-    message += `Sebab: ${reason}\n`;
-
-    // Add illness type if applicable
-    if (document.getElementById('reason').value === 'Sakit') {
-        const illnessType = document.getElementById('illnessType').value;
-        let illness = illnessType;
-
-        if (illnessType === 'Lain-lain') {
-            illness = document.getElementById('otherIllness').value;
-        }
-
-        message += `Jenis Sakit: ${illness}\n`;
-    }
-
-    message += `Tarikh: ${startDate} - ${endDate}\n`;
-    message += `Jumlah Hari: ${duration}\n\n`;
-
-    // Add document info
-    if (document.getElementById('reason').value === 'Sakit') {
-        message += `Dokumen: Sijil Cuti Sakit (MC) dilampirkan`;
-    } else {
-        message += `Dokumen: Surat Ibu Bapa dilampirkan`;
-    }
-
-    return message;
 }
 
 // Format date to Malaysian format
@@ -328,26 +226,17 @@ async function handleSubmit(e) {
     submitBtn.disabled = true;
 
     try {
-        // Generate WhatsApp link FIRST (before async operations)
-        const whatsappLink = generateWhatsAppLink();
-
         // Prepare form data
         const formData = await prepareFormData();
 
         // Submit to Google Sheets
         await submitToGoogleSheets(formData);
 
-        // Show success message with WhatsApp button
-        const confirmed = confirm('Maklumat berjaya dihantar ke Google Sheets!\n\nKlik OK untuk buka WhatsApp dan hantar mesej kepada guru.');
-
-        if (confirmed) {
-            // Use location.href instead of window.open to avoid pop-up blockers
-            window.location.href = whatsappLink;
-        }
+        // Show simple success message
+        alert('Maklumat berjaya dihantar!\\n\\nTerima kasih.');
 
         // Reset form
         document.getElementById('attendanceForm').reset();
-        document.getElementById('previewSection').style.display = 'none';
         document.getElementById('durationDisplay').textContent = '-';
 
     } catch (error) {
@@ -387,7 +276,7 @@ async function prepareFormData() {
             formData.append('illnessType', illnessType);
         }
 
-        // MC file
+        // MC file (optional)
         const mcFile = document.getElementById('mcUpload').files[0];
         if (mcFile) {
             formData.append('document', mcFile);
@@ -396,7 +285,7 @@ async function prepareFormData() {
     } else {
         formData.append('illnessType', '-');
 
-        // Letter file
+        // Letter file (optional)
         const letterFile = document.getElementById('letterUpload').files[0];
         if (letterFile) {
             formData.append('document', letterFile);
@@ -447,13 +336,4 @@ function fileToBase64(file) {
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
-}
-
-// Generate WhatsApp link
-function generateWhatsAppLink() {
-    const message = generateWhatsAppMessage();
-    const encodedMessage = encodeURIComponent(message);
-
-    // Use WhatsApp API link (works on both mobile and web)
-    return `https://wa.me/?text=${encodedMessage}`;
 }
