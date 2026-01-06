@@ -98,7 +98,7 @@ body {
 
 /* Deadline Notice */
 .deadline-notice {
-    background: #DC2626;
+    background: #cc5e58;
     color: white;
     padding: 1.75rem 1.5rem;
     border-radius: var(--radius-md);
@@ -454,3 +454,4 @@ body {
         transform: translateY(0);
     }
 }
+
