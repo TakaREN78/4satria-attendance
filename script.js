@@ -198,8 +198,41 @@ function handleFilePreview(e) {
 
 // Show preview of WhatsApp message
 function showPreview() {
-    if (!validateForm()) {
+    // Validate only required fields except file upload
+    const studentName = document.getElementById('studentName').value;
+    const reason = document.getElementById('reason').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    if (!studentName) {
+        alert('Sila pilih nama pelajar');
         return;
+    }
+    if (!reason) {
+        alert('Sila pilih sebab ketidakhadiran');
+        return;
+    }
+    if (!startDate || !endDate) {
+        alert('Sila pilih tarikh mula dan tamat');
+        return;
+    }
+
+    // Check conditional fields
+    if (reason === 'Sakit') {
+        const illnessType = document.getElementById('illnessType').value;
+        if (!illnessType) {
+            alert('Sila pilih jenis sakit');
+            return;
+        }
+        if (illnessType === 'Lain-lain' && !document.getElementById('otherIllness').value) {
+            alert('Sila nyatakan jenis sakit');
+            return;
+        }
+    } else if (reason === 'Lain-Lain') {
+        if (!document.getElementById('otherReason').value) {
+            alert('Sila nyatakan sebab ketidakhadiran');
+            return;
+        }
     }
 
     const message = generateWhatsAppMessage();
@@ -295,20 +328,22 @@ async function handleSubmit(e) {
     submitBtn.disabled = true;
 
     try {
+        // Generate WhatsApp link FIRST (before async operations)
+        const whatsappLink = generateWhatsAppLink();
+
         // Prepare form data
         const formData = await prepareFormData();
 
         // Submit to Google Sheets
         await submitToGoogleSheets(formData);
 
-        // Generate WhatsApp link
-        const whatsappLink = generateWhatsAppLink();
+        // Show success message with WhatsApp button
+        const confirmed = confirm('Maklumat berjaya dihantar ke Google Sheets!\n\nKlik OK untuk buka WhatsApp dan hantar mesej kepada guru.');
 
-        // Open WhatsApp
-        window.open(whatsappLink, '_blank');
-
-        // Show success message
-        alert('Maklumat berjaya dihantar! Link WhatsApp telah dibuka. Sila hantar mesej kepada guru.');
+        if (confirmed) {
+            // Use location.href instead of window.open to avoid pop-up blockers
+            window.location.href = whatsappLink;
+        }
 
         // Reset form
         document.getElementById('attendanceForm').reset();
