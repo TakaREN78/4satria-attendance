@@ -16,6 +16,11 @@
             <p class="subtitle">Kelas 4 Satria</p>
         </header>
 
+        <!-- Deadline Notice -->
+        <div class="deadline-notice">
+            ⏰ PENTING: Sila hantar maklumat sebelum jam 8:00 pagi
+        </div>
+
         <main class="form-container">
             <form id="attendanceForm">
                 <!-- Student Selection -->
@@ -90,7 +95,7 @@
 
                 <!-- File Upload (Conditional) -->
                 <div class="form-group" id="mcUploadGroup" style="display: none;">
-                    <label for="mcUpload">Muat Naik Gambar MC <span class="required">*</span></label>
+                    <label for="mcUpload">Muat Naik Gambar MC</label>
                     <div class="file-upload-wrapper">
                         <input type="file" id="mcUpload" name="mcUpload" accept="image/*" capture="environment">
                         <label for="mcUpload" class="file-upload-label">
@@ -99,10 +104,11 @@
                         </label>
                         <div id="mcPreview" class="file-preview"></div>
                     </div>
+                    <p class="upload-note">Jika tiada gambar, boleh hantar kemudian kepada cikgu</p>
                 </div>
 
                 <div class="form-group" id="letterUploadGroup" style="display: none;">
-                    <label for="letterUpload">Muat Naik Surat Ibu Bapa <span class="required">*</span></label>
+                    <label for="letterUpload">Muat Naik Surat Ibu Bapa</label>
                     <div class="file-upload-wrapper">
                         <input type="file" id="letterUpload" name="letterUpload" accept="image/*" capture="environment">
                         <label for="letterUpload" class="file-upload-label">
@@ -111,18 +117,12 @@
                         </label>
                         <div id="letterPreview" class="file-preview"></div>
                     </div>
+                    <p class="upload-note">Jika tiada gambar, boleh hantar kemudian kepada cikgu</p>
                 </div>
 
-                <!-- Preview Section -->
-                <div class="preview-section" id="previewSection" style="display: none;">
-                    <h3>Pratonton Mesej WhatsApp</h3>
-                    <div class="preview-content" id="previewContent"></div>
-                </div>
-
-                <!-- Action Buttons -->
+                <!-- Submit Button -->
                 <div class="button-group">
-                    <button type="button" class="btn btn-secondary" id="previewBtn">Pratonton</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Hantar & Jana Link WhatsApp</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Hantar Maklumat</button>
                 </div>
 
                 <!-- Loading Indicator -->
