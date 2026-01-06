@@ -17,12 +17,12 @@ async function loadStudentData() {
         const response = await fetch('murid4Satria.csv');
         const csvText = await response.text();
 
-        // Parse CSV
-        const lines = csvText.split('\\n');
+        // Parse CSV - use single backslash for newline
+        const lines = csvText.split('\n');
         const studentSelect = document.getElementById('studentName');
 
-        // Skip header and empty lines, start from line 4 (index 3)
-        for (let i = 3; i < lines.length; i++) {
+        // Skip only the header line (index 0), start from line 2 (index 1)
+        for (let i = 1; i < lines.length; i++) {
             const line = lines[i].trim();
             if (line) {
                 // Split by comma and get the name (second column)
