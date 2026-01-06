@@ -233,7 +233,7 @@ async function handleSubmit(e) {
         await submitToGoogleSheets(formData);
 
         // Show simple success message
-        alert('Maklumat berjaya dihantar!\\n\\nTerima kasih.');
+        alert('Maklumat berjaya dihantar! Terima kasih.');
 
         // Reset form
         document.getElementById('attendanceForm').reset();
@@ -337,3 +337,4 @@ function fileToBase64(file) {
         reader.readAsDataURL(file);
     });
 }
+
